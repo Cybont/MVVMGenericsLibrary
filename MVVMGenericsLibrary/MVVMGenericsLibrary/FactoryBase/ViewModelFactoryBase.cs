@@ -3,12 +3,11 @@ using System.Linq;
     
     namespace GenericsLibrary
 {
-    public abstract class ViewModelFactoryBase<TData, T, TKey>
+    public abstract class ViewModelFactoryBase<T, TKey>
     where T : IKey<TKey>
-    where TData : IKey<TKey>
     {
         public abstract ItemViewModelBase<T, TKey> CreateItemViewModel(T obj);
-        public virtual List<ItemViewModelBase<T, TKey>> GetItemViewModelCollection(ICRUD<T, TData, TKey> catalog)
+        public virtual List<ItemViewModelBase<T, TKey>> GetItemViewModelCollection(ICRUD<T, TKey> catalog)
         {
             List<ItemViewModelBase<T, TKey>> items = new List<ItemViewModelBase<T, TKey>>();
 
@@ -18,7 +17,7 @@ using System.Linq;
             }
             return items;
         }
-        public virtual List<ItemViewModelBase<T, TKey>> GetItemViewModelCollection(ICRUD<T, TData, TKey> catalog, int FK)
+        public virtual List<ItemViewModelBase<T, TKey>> GetItemViewModelCollection(ICRUD<T, TKey> catalog, int FK)
         {
             List<ItemViewModelBase<T, TKey>> items = new List<ItemViewModelBase<T, TKey>>();
 

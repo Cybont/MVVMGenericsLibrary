@@ -7,11 +7,10 @@ using System.Windows.Input;
 
 namespace GenericsLibrary
 {
-    public class DeleteCommandBase<TData, T, TKey> : CommandBase<TData, T, TKey>
-        where TData : IKey<TKey>, new()
+    public class DeleteCommandBase<T, TKey> : CommandBase<T, TKey>
         where T : IKey<TKey>, new()
     {
-        public DeleteCommandBase(ICRUD<T, TData, TKey> catalog, MasterDetailsViewModelBase<TData, T, TKey> viewModel)
+        public DeleteCommandBase(ICRUD<T, TKey> catalog, MasterDetailsViewModelBase<T, TKey> viewModel)
         :base(catalog, viewModel){}
         public override void ExecuteEvent()
         {

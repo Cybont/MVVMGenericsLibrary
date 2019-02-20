@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVVMGenericsLibrary.Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,31 +8,23 @@ using System.Threading.Tasks;
 
 namespace GenericsLibrary
 {
-    public abstract class CatalogBaseDB<TData, T, TKey> : IEnumerable<T>, ICRUD<T, TData, TKey>
+    public abstract class CatalogBaseDB<T, TKey> : IEnumerable<T>, ICRUD<T, TKey>
         where T : IKey<TKey>
-        where TData : IKey<TKey>, new()
     {
         protected Dictionary<TKey, T> _data;
-        protected IFactory<TData, T> _factory;
+        protected IFactory<T, TKey> _factory;
         private IDBSource<T, TKey> _dataSource;
-        protected TData _dataPackage;
 
         #region Constructors
-        protected CatalogBaseDB(IFactory<TData, T> factory, string serverURL, string apiId)
+        protected CatalogBaseDB(IFactory<T, TKey> factory, string serverURL, string apiId)
         {
             _dataSource = new DBSource<T, TKey>(serverURL, apiId);
             _factory = factory;
             _data = new Dictionary<TKey, T>();
-            _dataPackage = new TData();
         }
         #endregion
 
         #region Properties
-        public TData DataPackage
-        {
-            get => _dataPackage;
-            set => _dataPackage = value;
-        }
         public T this[TKey key]
         {
             get { return Read(key).Result; }
@@ -64,7 +57,7 @@ namespace GenericsLibrary
         //    _data.Add(obj.Key, obj);
 
         //}
-        public virtual async Task<TKey> Create(TData data)
+        public virtual async Task<TKey> Create(IViewData<TKey> data)
         {
             // DB
             T obj = _factory.Convert(data);
@@ -78,7 +71,7 @@ namespace GenericsLibrary
         {
             return await _dataSource.Read(key);
         }
-        public virtual async Task Update(TData data)
+        public virtual async Task Update(IViewData<TKey> data)
         {
             // DB
             T obj = _factory.Convert(data);

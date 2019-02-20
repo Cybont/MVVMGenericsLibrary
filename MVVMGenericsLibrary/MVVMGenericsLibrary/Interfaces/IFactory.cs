@@ -1,8 +1,10 @@
-﻿namespace GenericsLibrary
+﻿using MVVMGenericsLibrary.Interfaces;
+
+namespace GenericsLibrary
 {
     //For Factories
-    public interface IFactory<TData, T>
+    public interface IFactory<T, TKey>
     {
-        T Convert(TData data);
+        T Convert(IViewData<TKey> data);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVVMGenericsLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,35 +12,39 @@ using System.Windows.Input;
 
 namespace GenericsLibrary
 {
-    public abstract class MasterDetailsViewModelBase<TData, T, TKey> : INotifyPropertyChanged
-    where TData : IKey<TKey>, new()
+    public abstract class MasterDetailsViewModelBase<T, TKey> : IDataPackage<TKey>, INotifyPropertyChanged
     where T : IKey<TKey>, new()
     {
         #region Instance fields
-        protected ICRUD<T, TData, TKey> _catalog;
-        protected ViewModelFactoryBase<TData, T, TKey> _factoryVM;
+        protected ICRUD<T, TKey> _catalog;
+        protected ViewModelFactoryBase<T, TKey> _factoryVM;
         protected ItemViewModelBase<T, TKey> _itemViewModelSelected;
-        //protected TData _dataPackage;
-        protected DeleteCommandBase<TData, T, TKey> _deleteCommand;
-        protected CreateCommandBase<TData, T, TKey> _createCommand;
-        protected UpdateCommandBase<TData, T, TKey> _updateCommand;
+        protected IViewData<TKey> _dataPackage;
+        protected DeleteCommandBase<T, TKey> _deleteCommand;
+        protected CreateCommandBase<T, TKey> _createCommand;
+        protected UpdateCommandBase<T, TKey> _updateCommand;
         protected bool _isItemSelected;
         protected bool _canCreate;
         #endregion
+
         #region Constructor
-        protected MasterDetailsViewModelBase(ViewModelFactoryBase<TData, T, TKey> factoryVM, ICRUD<T, TData, TKey> catalog)
+        protected MasterDetailsViewModelBase(ViewModelFactoryBase<T, TKey> factoryVM, ICRUD<T, TKey> catalog)
         {
             _catalog = catalog;
             _factoryVM = factoryVM;
-            //_dataPackage = new TData();
         }
         #endregion
+
         #region Properties for Data Binding
+
         #region Commands
         public ICommand DeletionCommand => _deleteCommand;
         public ICommand CreateCommand => _createCommand;
         public ICommand UpdateCommand => _updateCommand;
         #endregion
+
+        public abstract IViewData<TKey> DataPackage { get; set; }
+       
         public List<ItemViewModelBase<T, TKey>> ItemViewModelCollection => _factoryVM.GetItemViewModelCollection(_catalog);
         public bool IsItemSelected
         {
@@ -53,7 +58,7 @@ namespace GenericsLibrary
             }
         }
 
-        public ICRUD<T, TData, TKey> Catalog
+        public ICRUD<T, TKey> Catalog
         {
             get { return _catalog; }
         }
@@ -92,10 +97,7 @@ namespace GenericsLibrary
                 SelectedItemEvent();
             }
         }
-        //public TData DataPackage {
-        //    get => _dataPackage;
-        //    set => _dataPackage = value;
-        //}
+
         #endregion
         #region Methods
         public void RefreshItemViewModelCollection()

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace GenericsLibrary
 {
-    public class UpdateCommandBase<TData, T, TKey> : CommandBase<TData, T, TKey>
-        where TData : IKey<TKey>, new()
+    public class UpdateCommandBase<T, TKey> : CommandBase<T, TKey>
         where T : IKey<TKey>, new()
     {
-        public UpdateCommandBase(ICRUD<T, TData, TKey> catalog, MasterDetailsViewModelBase<TData, T, TKey> viewModel)
+        public UpdateCommandBase(ICRUD<T, TKey> catalog, MasterDetailsViewModelBase<T, TKey> viewModel)
         :base(catalog, viewModel){}
         public override void ExecuteEvent()
         {
@@ -25,7 +24,7 @@ namespace GenericsLibrary
         public override async void Execute()
         {
             //_catalog.Update(_viewModel.DataPackage);
-            await _catalog.Update(_catalog.DataPackage);
+            await _catalog.Update(_viewModel.DataPackage);
             ExecuteEvent();
         }
     }

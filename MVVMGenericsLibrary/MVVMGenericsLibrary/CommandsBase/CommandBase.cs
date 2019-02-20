@@ -7,13 +7,12 @@ using System.Windows.Input;
 
 namespace GenericsLibrary
 {
-    public abstract class CommandBase<TData, T, TKey> : ICommand
-        where TData : IKey<TKey>, new()
+    public abstract class CommandBase<T, TKey> : ICommand
         where T : IKey<TKey>, new()
     {
-        protected MasterDetailsViewModelBase<TData, T, TKey> _viewModel;
-        protected ICRUD<T, TData, TKey> _catalog;
-        protected CommandBase(ICRUD<T, TData, TKey> catalog, MasterDetailsViewModelBase<TData, T, TKey> viewModel)
+        protected MasterDetailsViewModelBase<T, TKey> _viewModel;
+        protected ICRUD<T, TKey> _catalog;
+        protected CommandBase(ICRUD<T, TKey> catalog, MasterDetailsViewModelBase<T, TKey> viewModel)
         {
             _catalog = catalog;
             _viewModel = viewModel;
