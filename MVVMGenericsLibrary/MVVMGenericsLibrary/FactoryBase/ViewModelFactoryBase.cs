@@ -22,7 +22,7 @@ using System.Linq;
         {
             List<ItemViewModelBase<T, TKey>> items = new List<ItemViewModelBase<T, TKey>>();
 
-            foreach (T obj in catalog.All.OrderByDescending(Model => Model.Key))
+            foreach (T obj in catalog.All.OrderByDescending(Model => FK))
             {
                 items.Add(CreateItemViewModel(obj));
             }
