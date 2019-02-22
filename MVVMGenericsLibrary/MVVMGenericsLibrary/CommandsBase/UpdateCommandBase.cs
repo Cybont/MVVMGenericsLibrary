@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericsLibrary
 {
-    public class UpdateCommandBase<T, TKey> : CommandBase<T, TKey>
+    public abstract class UpdateCommandBase<T, TKey> : CommandBase<T, TKey>
         where T : IKey<TKey>, new()
     {
         public UpdateCommandBase(ICRUD<T, TKey> catalog, MasterDetailsViewModelBase<T, TKey> viewModel)
@@ -23,7 +23,6 @@ namespace GenericsLibrary
         }
         public override async void Execute()
         {
-            //_catalog.Update(_viewModel.DataPackage);
             await _catalog.Update(_viewModel.DataPackage);
             ExecuteEvent();
         }

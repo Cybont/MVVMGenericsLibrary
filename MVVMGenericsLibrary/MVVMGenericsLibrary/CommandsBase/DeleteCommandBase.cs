@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace GenericsLibrary
 {
-    public class DeleteCommandBase<T, TKey> : CommandBase<T, TKey>
+    public abstract class DeleteCommandBase<T, TKey> : CommandBase<T, TKey>
         where T : IKey<TKey>, new()
     {
         public DeleteCommandBase(ICRUD<T, TKey> catalog, MasterDetailsViewModelBase<T, TKey> viewModel)

@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace GenericsLibrary
 {
-    public class CreateCommandBase<T, TKey> : CommandBase<T, TKey>
+    public abstract class CreateCommandBase<T, TKey> : CommandBase<T, TKey>
         where T : IKey<TKey>, new()
     {
         public CreateCommandBase(ICRUD<T, TKey> catalog, MasterDetailsViewModelBase<T, TKey> viewModel)
         :base(catalog, viewModel){}
+
+        public abstract bool GenerateKey { get; set; }
+
         public override void ExecuteEvent()
         {
             _viewModel.RefreshItemViewModelCollection();
@@ -21,8 +24,14 @@ namespace GenericsLibrary
         }
         public override async void Execute()
         {
-            //_catalog.Create(_viewModel.DataPackage);
-            await _catalog.Create(_viewModel.DataPackage);
+            if (GenerateKey) {
+                await _catalog.Create(_viewModel.DataPackage, true);
+            }
+            else
+            {
+                await _catalog.Create(_viewModel.DataPackage, false);
+            }
+            
             ExecuteEvent();
         }
     }

@@ -45,28 +45,28 @@ namespace GenericsLibrary
         }
 
         #region DB_CRUD
-        //public virtual async Task Create(TData data, bool nextKey)
-        //{
-        //    T obj = _factory.Convert(data);
-        //    if (nextKey)
-        //    {
-        //        TKey newKey = NextKey();
-        //        obj.Key = newKey;
-        //        await _dataSource.Create(obj);
-        //    }
-        //    _data.Add(obj.Key, obj);
-
-        //}
-        public virtual async Task<TKey> Create(IViewData<TKey> data)
+        public virtual async Task<TKey> Create(IViewData<TKey> data, bool nextKey)
         {
-            // DB
             T obj = _factory.Convert(data);
-            obj.Key = await _dataSource.Create(obj);
 
+            // DB
+            if (nextKey)
+            {
+                TKey newKey = NextKey();
+                obj.Key = newKey;
+                await _dataSource.Create(obj);
+            }
+            else
+            {
+                obj.Key = await _dataSource.Create(obj);
+            }
+            
             // Local
             _data.Add(obj.Key, await Read(obj.Key));
             return obj.Key;
+
         }
+
         public async Task<T> Read(TKey key)
         {
             return await _dataSource.Read(key);
