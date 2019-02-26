@@ -64,7 +64,6 @@ namespace GenericsLibrary
             // Local
             _data.Add(obj.Key, await Read(obj.Key));
             return obj.Key;
-
         }
 
         public async Task<T> Read(TKey key)
