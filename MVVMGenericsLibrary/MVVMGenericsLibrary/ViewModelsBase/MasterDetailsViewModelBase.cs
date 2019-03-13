@@ -28,10 +28,11 @@ namespace GenericsLibrary
         #endregion
 
         #region Constructor
-        protected MasterDetailsViewModelBase(ViewModelFactoryBase<T, TKey> factoryVM, ICRUD<T, TKey> catalog)
+        protected MasterDetailsViewModelBase(ICRUD<T, TKey> catalog)
         {
             _catalog = catalog;
-            _factoryVM = factoryVM;
+            SetVMFactory();
+            SetCommands();
         }
         #endregion
 
@@ -105,8 +106,14 @@ namespace GenericsLibrary
             OnPropertyChanged(nameof(ItemViewModelCollection));
         }
        
+        // What happens when you select an item in the view
         public abstract void SelectedItemEvent();
 
+        // Set the commands for this view model
+        protected abstract void SetCommands();
+
+        // Set item viewmodel factory
+        protected abstract void SetVMFactory();
         #endregion
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
@@ -116,6 +123,6 @@ namespace GenericsLibrary
         }
         #endregion
 
-
+        
     }
 }
