@@ -70,6 +70,7 @@ namespace GenericsLibrary
         {
             return await _dataSource.Read(key);
         }
+
         public virtual async Task Update(IViewData<TKey> data)
         {
             // DB
@@ -80,6 +81,7 @@ namespace GenericsLibrary
             _data.Remove(obj.Key);
             _data.Add(obj.Key, await Read(obj.Key));
         }
+
         public virtual async Task Delete(TKey key)
         {
             // DB
